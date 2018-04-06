@@ -26,9 +26,8 @@ Lyra is a lightweight encryption tool that makes protecting your sensitive files
 * Simply `mv` the binary to your `$PATH`
 
 # Installation from source
-* `go get -d `
+* `go get -d github.com/azohra/lyra`
 * `make install` will install lyra to your path.
-
 
 # Usage
 ```

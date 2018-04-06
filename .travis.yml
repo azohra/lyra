@@ -4,6 +4,10 @@ go:
  - release
  - tip
 
+stages:
+  - test
+  - build
+
 jobs:
   include:
     - stage: test
