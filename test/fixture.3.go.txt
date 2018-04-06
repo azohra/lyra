@@ -1,0 +1,103 @@
+@!A6C4E5@!B5A6
+package lfile
+
+import (
+	"bytes"
+	"encoding/hex"
+	"errors"
+	"io"
+	"strings"
+
+	"github.com/azohra/lyra/pkg/lcrypt"
+)
+
+//SecureLyraFile represents an enciphered file.
+type SecureLyraFile struct {
+	ciphertext []byte
+
+	//authentication parameters
+	salt  []byte
+	nonce []byte
+}
+
+//NewSecureLyraFile initializes a new SecureLyraFile
+func NewSecureLyraFile() *SecureLyraFile {
+	return &SecureLyraFile{}
+}
+
+//GenerateAuthParams for a new nonce and salt paramaters for an encryption of a LyraFile
+func (payload *SecureLyraFile) GenerateAuthParams() error {
+	payload.nonce = make([]byte, lcrypt.NonceSize)
+	payload.salt = lcrypt.GenSalt()
+
+	_, err := lcrypt.GenNonce(payload.nonce)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+//DecipherFile deciphers a SecureLyraFile to a new LyraFile
+func (payload *SecureLyraFile) DecipherFile(key *lcrypt.LKey) (*LyraFile, error) {
+	var err error
+	ptxt := NewLyraFile()
+
+	ptxt.plaintext, err = lcrypt.AesDecrypt(payload.ciphertext, payload.nonce, key.GetKey())
+	if err != nil {
+		return nil, err
+	}
+	return ptxt, nil
+}
+
+//ParseFile parses encrypted file *os.File to a SecureLyraFile struct
+func (payload *SecureLyraFile) ParseFile(file string) error {
+	//ReadFile
+	//Parse Authentication data out and tail of file
+	ctxt, err := readFile(file)
+	defer ctxt.Close()
+	buf := bytes.NewBuffer(nil)
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(buf, ctxt)
+	if err != nil {
+		return err
+	}
+
+	payload.ciphertext = buf.Bytes()
+
+	//Get Nonce and Salt from this file
+
+	return nil
+}
+
+//Write, writes a SecureLyraFile to a path wd
+func (payload *SecureLyraFile) Write(wd string) error {
+	//Write to file, append auth data at the last line
+	//ENCODE INTO HEX
+	//@!SALT@!NONCE
+
+	return nil
+}
+
+//parseAuthData parses auth data from data
+func parseAuthData(data string) ([]byte, []byte, error) {
+	adata := strings.Split(data, "@!")
+	if len(adata) != 3 {
+		return nil, nil, errors.New("Parsing Failed")
+	}
+
+	s, err := hex.DecodeString(adata[1])
+	if err != nil {
+		return nil, nil, err
+	}
+
+	n, err := hex.DecodeString(adata[2])
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return s, n, nil
+}

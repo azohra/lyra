@@ -1,0 +1,42 @@
+# Created by https://www.gitignore.io/api/go,visualstudiocode
+
+### Go ###
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+### binaries from builds ###
+lyra-*
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history
+
+### Dependencies ###
+vendor
+
+### debug ###
+debug
+
+### fixtues that change often ###
+test/fixture.311.go.txt
+
+### Go test file ###
+-r
+
+
+
+# End of https://www.gitignore.io/api/go,visualstudiocode

@@ -1,0 +1,29 @@
+stages:
+  - test
+  - build
+
+image: golang:1.9.4
+before_script:
+  - mkdir -p $GOPATH/src/github.com/azohra/$CI_PROJECT_NAME
+  - cp -R $(pwd) $GOPATH/src/github.com/azohra/
+  - cd  $GOPATH/src/github.com/azohra/$CI_PROJECT_NAME
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  - make dep
+
+test:
+  stage: test
+  script:
+    - make test
+
+build_binaries:
+  stage: build
+  script:
+    - make binaries
+    - mkdir -p $CI_PROJECT_DIR/linux
+    - mkdir -p $CI_PROJECT_DIR/darwin
+    - cp lyra-linux-amd64 $CI_PROJECT_DIR/linux/lyra
+    - cp lyra-darwin-amd64 $CI_PROJECT_DIR/darwin/lyra
+  artifacts:
+    paths:
+    - linux/lyra
+    - darwin/lyra
