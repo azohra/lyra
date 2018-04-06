@@ -3,6 +3,9 @@ go:
  - 1.9.4 
  - release
  - tip
+ 
+script: 
+        - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
 stages:
   - test
@@ -12,10 +15,8 @@ jobs:
   include:
     - stage: test
       script: 
-        - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
         - make dep
         - make test
     - stage: build
       script: 
-        - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
         - make binaries
