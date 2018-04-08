@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/azohra/lyra/master/docs/assets/logo.svg" height="250" width="250" />
+  <img src="https://cdn.rawgit.com/azohra/lyra/master/docs/assets/logo.svg" height="250" width="250" />
   <p align="center">
     <a href="https://travis-ci.org/azohra/lyra"><img src="https://travis-ci.org/azohra/lyra.svg?branch=master"></a>
     <a href="https://goreportcard.com/report/github.com/azohra/lyra"><img src="https://goreportcard.com/badge/github.com/azohra/lyra"></a>
