@@ -44,7 +44,7 @@ Coded with ❤️ by the Azohra team and made possible by open source software:
   * crypto by golang.org (BSD-style) https://github.com/golang/crypto
     * license available @ https://github.com/golang/crypto/blob/master/LICENSE
 `
-	version = `Version: 1.0.0 (April 2018)
+	version = `Version: 1.0.1 (April 2018)
 `
 )
 
