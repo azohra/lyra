@@ -10,7 +10,7 @@ stages:
   - build
 
 before_install:
-  - go get -u github.com/golang/dep/cmd/dep
+  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
 script:
   - make test
