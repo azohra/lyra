@@ -30,7 +30,7 @@ Lyra is a lightweight and fast encryption tool that makes protecting your sensit
 * [memguard](https://github.com/awnumar/memguard) for handling keys and plaintext secrurely in memory.
 
 # Installation
-#### Binaries (wip)
+#### Binaries
 * Signed [binaries](#releases) available for windows, linux and macOs available [here](https://github.com/azohra/lyra/releases)
 * Simply `mv` the binary to your `$PATH`
 #### Installation script (wip)
