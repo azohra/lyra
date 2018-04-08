@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./doc/assets/logo.png" height="140" />
+  <img src="https://raw.githubusercontent.com/azohra/lyra/master/docs/assets/logo.png" height="140" />
   <p align="center">
     <a href="https://travis-ci.org/azohra/lyra"><img src="https://travis-ci.org/azohra/lyra.svg?branch=master"></a>
     <a href="https://goreportcard.com/report/github.com/azohra/lyra"><img src="https://goreportcard.com/badge/github.com/azohra/lyra"></a>
@@ -31,7 +31,7 @@ Lyra is a lightweight and fast encryption tool that makes protecting your sensit
 
 # Installation
 #### Binaries (wip)
-* Signed [binaries](#Releases) available for windows, linux and macOs available [here](https://github.com/azohra/lyra/releases)
+* Signed [binaries](#releases) available for windows, linux and macOs available [here](https://github.com/azohra/lyra/releases)
 * Simply `mv` the binary to your `$PATH`
 #### Installation script (wip)
 * You could also alternatively install lyra by: 
