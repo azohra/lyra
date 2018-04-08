@@ -37,6 +37,6 @@ test/fixture.311.go.txt
 ### Go test file ###
 -r
 
-
+.DS_Store
 
 # End of https://www.gitignore.io/api/go,visualstudiocode
