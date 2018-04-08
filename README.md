@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/azohra/lyra/master/docs/assets/logo.png" height="250" width="250" />
+  <img src="https://raw.githubusercontent.com/azohra/lyra/master/docs/assets/logo.svg" height="250" width="250" />
   <p align="center">
     <a href="https://travis-ci.org/azohra/lyra"><img src="https://travis-ci.org/azohra/lyra.svg?branch=master"></a>
     <a href="https://goreportcard.com/report/github.com/azohra/lyra"><img src="https://goreportcard.com/badge/github.com/azohra/lyra"></a>
@@ -21,7 +21,7 @@ Lyra is a lightweight and fast encryption tool that makes protecting your sensit
 * Generate strong memorable passphrases via the diceware method.
 
 # Requirements (if building from source)
-* Go 1.9.4 and above
+* Go 1.9 and above
 * [Go Deps](https://golang.github.io/dep/) for dependency management.
 
 # Dependencies
