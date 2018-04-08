@@ -179,7 +179,5 @@ func (cmd *encryptcmd) genPass() error {
 		return err
 	}
 	cmd.passphrase = phrase[0]
-	//force garbage collection?
-	phrase = nil
 	return nil
 }

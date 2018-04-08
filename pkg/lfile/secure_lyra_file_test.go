@@ -76,6 +76,9 @@ func TestDecipherFile(t *testing.T) {
 	}
 
 	b, err := a.DecipherFile(ek)
+	if err != nil {
+		t.Error(err)
+	}
 
 	if !reflect.DeepEqual([]byte("exampleplaintext"), b.plaintext.Buffer()) {
 		t.Error("Decryption Failed")
