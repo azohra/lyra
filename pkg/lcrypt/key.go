@@ -58,7 +58,7 @@ func (k *LKey) GetSalt() []byte {
 	return k.salt
 }
 
-//InitKey initializes an encryption key passphrase with salt salt. InitKey initalizes a locked
+//InitKey initializes an encryption key passphrase with salt salt. InitKey initializes a locked
 //buffer that will be resistant to unauthorized memory manipulation, additionally it will wipe
 //passphrase.
 func (k *LKey) initKey(passphrase, salt []byte) error {
