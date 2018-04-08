@@ -33,9 +33,6 @@ Lyra is a lightweight and fast encryption tool that makes protecting your sensit
 #### Binaries
 * Signed [binaries](#releases) available for windows, linux and macOs available [here](https://github.com/azohra/lyra/releases)
 * Simply `mv` the binary to your `$PATH`
-#### Installation script (wip)
-* You could also alternatively install lyra by: 
-  * `curl https://raw.githubusercontent.com/azohra/lyra/master/install.sh | sh`
 #### Installation from source
 * If you don't feel comfortable to pipe to `sh` you can alternatevly do:
   * `go get -d github.com/azohra/lyra`
