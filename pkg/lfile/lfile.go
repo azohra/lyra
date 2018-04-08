@@ -7,8 +7,8 @@ import (
 	"github.com/azohra/lyra/pkg/lcrypt"
 )
 
-//Seperator defines delimitor for Salt and Nonce
-var Seperator = "@!"
+//Separator defines delimitor for Salt and Nonce
+var Separator = "@!"
 
 //Encipher defines encrypting operations
 type Encipher interface {

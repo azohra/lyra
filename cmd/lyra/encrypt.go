@@ -21,7 +21,7 @@ lyra encrypt file
 
 lyra encrypt -s file1 file
 
-	Encrypts the contents of file (user specifed file) and save the resulting output 
+	Encrypts the contents of file (user specified file) and save the resulting output 
 	to file1 (user specified file or specified path). Users will be asked to provide 
 	the passphrase via stdin. Original specified file will still remain in plaintext.
 
@@ -31,20 +31,20 @@ lyra encrypt --auto-gen file
 	and outputs the auto generated passphrase to stdout.
 	The auto generated passphrase is a 7 word passphrase generated via the diceware
 	method using the EFF new wordlist. It is imperative that the user keep a record
-	of the outputed passphrase as there will be no way to decipher the file without it.
+	of the outputted passphrase as there will be no way to decipher the file without it.
 	
 lyra encrypt -p "mypassphrase" file
 	
 	Encrypts and overides file (user specified file) with passphrase "mypassphrase",
 	this option will disable stdin interaction. Using this option will also disable
-	passphrase checking, therefore it is critical that you do not mispell or forget
+	passphrase checking, therefore it is critical that you do not misspell or forget
 	the passphrase. 
 
 lyra encrypt --auto-gen -s file1 file
 
-	Encrypts file (user specifed file) with an auto generated passphrase and save the 
+	Encrypts file (user specified file) with an auto generated passphrase and save the 
 	resulting output to file1 (user specified file). The auto generated passphrase will
-	be outputed to stdout and the original specified file will still remain in plaintext
+	be outputted to stdout and the original specified file will still remain in plaintext
 	/decrypted.
 
 lyra encrypt -p "mypassphrase" -s file1 file
@@ -59,7 +59,7 @@ const usagePass = `Specify a passphrase used to encrypt/decrypt the specified fi
 is set, passphrases will not fetched from stdin. 
 
 For encryption this flag will disable passphrase verification. Be careful not 
-to mispell your passphrase as there will be no way to decrypt your files!
+to misspell your passphrase as there will be no way to decrypt your files!
 `
 
 const usagePathEnc = `Encrypts the contents of file and save the resulting ciphertext in a new file. 

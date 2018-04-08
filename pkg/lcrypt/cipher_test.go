@@ -52,7 +52,7 @@ func TestDecipher(t *testing.T) {
 		t.Error("Decryption test failed")
 	}
 
-	// test cases where it is supose to returned failed, where integrity of the file has been tampered with
+	// test cases where it is suppose to returned failed, where integrity of the file has been tampered with
 	pt, err = AesDecrypt(append(ct, byte(0)), nonce, binkey)
 	if err == nil {
 		t.Error("Decryption test failed should have actually failed, integrity was purposely tampered with")

@@ -148,7 +148,7 @@ func parseCmd(args []string) (name string, helpNd bool, exit bool) {
 
 func handleErr(err error) {
 	if err != nil {
-		fmt.Fprint(os.Stderr, "An Error has occured:\n"+err.Error()+"\n")
+		fmt.Fprint(os.Stderr, "An Error has occurred:\n"+err.Error()+"\n")
 		os.Exit(BadExit)
 	}
 }

@@ -40,7 +40,7 @@ func NewParsedSLFile(file string) (*SecureLyraFile, error) {
 	return slf, nil
 }
 
-//GenerateAuthParams for a new nonce and salt paramaters for an encryption of a LyraFile
+//GenerateAuthParams for a new nonce and salt parameters for an encryption of a LyraFile
 func (payload *SecureLyraFile) GenerateAuthParams() error {
 	payload.nonce = make([]byte, lcrypt.NonceSize)
 
@@ -119,7 +119,7 @@ func (payload *SecureLyraFile) ParseFile(file string) error {
 
 //Write, writes a SecureLyraFile to a path wd
 func (payload *SecureLyraFile) Write(wd string) error {
-	authData := Seperator + hex.EncodeToString(payload.salt) + Seperator + hex.EncodeToString(payload.nonce) + "\n"
+	authData := Separator + hex.EncodeToString(payload.salt) + Separator + hex.EncodeToString(payload.nonce) + "\n"
 
 	f, err := os.Create(wd)
 	if err != nil {
@@ -142,7 +142,7 @@ func (payload *SecureLyraFile) Write(wd string) error {
 
 //parseAuthData parses auth data from data
 func parseAuthData(data string) ([]byte, []byte, error) {
-	adata := strings.Split(data, Seperator)
+	adata := strings.Split(data, Separator)
 	if len(adata) != 3 {
 		return nil, nil, errors.New("Parsing Failed")
 	}

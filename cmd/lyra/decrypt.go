@@ -18,7 +18,7 @@ lyra decrypt file
 
 lyra decrypt -s file1 file
 
-	Decrypts the contents of file (user specifed file) and save the resulting output 
+	Decrypts the contents of file (user specified file) and save the resulting output 
 	to file1 (user specified file or specified path). Users will be asked to provide 
 	the passphrase via stdin. Original specified file will still remain encrypted
 	with the same key.

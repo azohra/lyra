@@ -44,7 +44,7 @@ func NewParsedLyraFile(file string) (*LyraFile, error) {
 	return lf, nil
 }
 
-//EncipherFile a LyraFile to a SecureLyraFile and securely destroys the lyrafile upon sucessful encryption.
+//EncipherFile a LyraFile to a SecureLyraFile and securely destroys the lyrafile upon successful encryption.
 func (payload *LyraFile) EncipherFile(key *lcrypt.LKey) (*SecureLyraFile, error) {
 	ctxt := newSecureLyraFile()
 	err := ctxt.GenerateAuthParams()
@@ -93,7 +93,7 @@ func (payload *LyraFile) ParseFile(file string) error {
 	return err
 }
 
-//Write, writes a LyraFile to a path Wd and destroys the lyrafile upon sucessful write
+//Write, writes a LyraFile to a path Wd and destroys the lyrafile upon successful write
 func (payload *LyraFile) Write(wd string) error {
 	f, err := os.Create(wd)
 	if err != nil {

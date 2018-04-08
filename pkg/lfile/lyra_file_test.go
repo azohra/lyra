@@ -95,7 +95,7 @@ func TestParseFileLyraFile(t *testing.T) {
 
 	err = ctx.ParseFile(fixture2)
 	if err != nil {
-		t.Error("plaintext should have been destoryed.")
+		t.Error("plaintext should have been destroyed.")
 	}
 }
 
