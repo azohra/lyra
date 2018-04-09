@@ -31,14 +31,15 @@ Lyra is a lightweight and fast encryption tool that makes protecting your sensit
 
 # Installation
 #### Binaries
-* Signed [binaries](#releases) available for windows, linux and macOs available [here](https://github.com/azohra/lyra/releases)
+* Signed [binaries](#releases) available for windows, linux and macOs available [here](https://github.com/azohra/lyra/releases).
 * Simply `mv` the binary to your `$PATH`
 #### Installation from source
-* If you don't feel comfortable to pipe to `sh` you can alternatevly do:
+* You can alternatively install lyra using:
   * `go get -d github.com/azohra/lyra`
-  * `make install`
+  * `cd $(go env GOPATH)/src/github.com/azohra/lyra && make install`
 #### Installation from Brew
-* `brew install azohra/tools/lyra`
+* Lyra can also be installed via brew:
+  * `brew install azohra/tools/lyra`
 
 # Usage
 ```
