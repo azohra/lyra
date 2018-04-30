@@ -2,8 +2,7 @@
 package lcrypt
 
 import (
-	"fmt"
-	"os"
+	"errors"
 
 	"golang.org/x/crypto/argon2"
 )
@@ -33,14 +32,14 @@ func GenKey(pass []byte, salt []byte) []byte {
 }
 
 //GenSalt generates a random salt of SaltSize
-func GenSalt() []byte {
+func GenSalt() ([]byte, error) {
 	salt := make([]byte, SaltSize)
 
 	_, err := GenNonce(salt)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to generate Salt")
+		return nil, errors.New("Failed to generate random numbers")
 	}
 
-	return salt
+	return salt, nil
 }

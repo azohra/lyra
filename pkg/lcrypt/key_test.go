@@ -7,7 +7,10 @@ import (
 
 func TestNewLKey(t *testing.T) {
 	txtk := []byte("A Password")
-	salt := GenSalt()
+	salt, err1 := GenSalt()
+	if err1 != nil {
+		t.Error(err1)
+	}
 
 	key, err := NewLKey(txtk, salt)
 	if err != nil {
@@ -21,13 +24,19 @@ func TestNewLKey(t *testing.T) {
 
 func TestInitKey(t *testing.T) {
 	txtk := []byte("A Password")
-	salt := GenSalt()
+	salt, err1 := GenSalt()
+	if err1 != nil {
+		t.Error(err1)
+	}
 
 	key := &LKey{}
 	key.initKey(txtk, salt)
 
 	etxtk := []byte("A Password")
-	salt2 := GenSalt()
+	salt2, err1 := GenSalt()
+	if err1 != nil {
+		t.Error(err1)
+	}
 	key2 := GenKey(etxtk, salt2)
 
 	if reflect.DeepEqual(key.GetKey(), key2) {
@@ -50,7 +59,10 @@ func TestInitKey(t *testing.T) {
 
 func TestGetKey(t *testing.T) {
 	txtk := []byte("A Password")
-	salt := GenSalt()
+	salt, err1 := GenSalt()
+	if err1 != nil {
+		t.Error(err1)
+	}
 
 	key, err := NewLKey(txtk, salt)
 	if err != nil {
@@ -68,7 +80,10 @@ func TestGetKey(t *testing.T) {
 
 func TestGetSalt(t *testing.T) {
 	txtk := []byte("A Password")
-	salt := GenSalt()
+	salt, err1 := GenSalt()
+	if err1 != nil {
+		t.Error(err1)
+	}
 
 	key, err := NewLKey(txtk, salt)
 	if err != nil {
@@ -85,7 +100,10 @@ func TestGetSalt(t *testing.T) {
 }
 func TestDestroyKey(t *testing.T) {
 	txtk := []byte("A Password")
-	salt := GenSalt()
+	salt, err1 := GenSalt()
+	if err1 != nil {
+		t.Error(err1)
+	}
 
 	key, err := NewLKey(txtk, salt)
 	if err != nil {
