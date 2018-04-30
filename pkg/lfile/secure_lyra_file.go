@@ -104,7 +104,9 @@ func (payload *SecureLyraFile) ParseFile(file string) error {
 		start++
 	}
 
-	if len(authData) == 0 || len(str) == 0 {
+	if len(authData) == 0 {
+		return errors.New("The file contains no authentication parameters. Has it been encrypted with lyra?")
+	} else if len(str) == 0 {
 		return errors.New("Specified file can not be empty")
 	}
 
@@ -150,12 +152,16 @@ func parseAuthData(data string) ([]byte, []byte, error) {
 
 	s, err := hex.DecodeString(adata[1])
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, errors.New("Failed to load authentication parameters, the file's salt value is in an unknown format")
 	}
 
 	n, err := hex.DecodeString(adata[2])
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, errors.New("Failed to load authentication parameters, the file's nonce value is an unknown format")
+	}
+
+	if len(s) != int(lcrypt.SaltSize) || len(n) != int(lcrypt.NonceSize) {
+		return nil, nil, errors.New("Failed to load authentication parameters, unknown values specified")
 	}
 
 	return s, n, nil

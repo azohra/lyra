@@ -33,6 +33,7 @@ clean: ## Remove previous build and undo install
 	@rm -f /usr/local/bin/${PROJECT_NAME}
 	@rm -f ${GOPATH}/bin/${PROJECT_NAME}
 	@rm -rf build/bin
+	@rm -f ./lyra
 
 build: ## Build a binary in the current working directory
 	@go build ./cmd/lyra/...
