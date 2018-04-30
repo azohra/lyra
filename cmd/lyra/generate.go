@@ -5,28 +5,48 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/brsmsn/gware/pkg/diceware"
 )
 
-const helpstrgen = `
+const (
+	helpstrgen = `
 The following exmaples are all the possible options for the "generate" command:
 
 lyra generate --words 7 --phrases 6
 
 	Generate 6 diceware passphrases each containing 7 words.
 
+lyra generate --rm-spaces --words 7 --phrases 6
+
+	Generate 6 diceware passphrases each containing 7 words with no spaces
+
+lyra generate --rm-spaces --words 7 
+
+	Generate 1 diceware passphrase containing 7 words with no spaces
+
+lyra generate --rm-spaces --phrases 7 
+
+	Generate 7 diceware passphrase containing 7 words with no spaces
+
 `
 
-const usageWords = `Specify the number of words that a passphrase will have.
+	usageWords = `Specify the number of words that a passphrase will have.
 `
 
-const usagePhrases = `Specify the number of passphrases that will be generated.
+	usagePhrases = `Specify the number of passphrases that will be generated.
 `
+
+	usageRmSpaces = `Specify removal of spaces, this will replace all spaces
+with a hyphen as a delimiter.
+`
+)
 
 type gencmd struct {
 	numWords   int
 	numPhrases int
+	noSpaces   bool
 }
 
 func (cmd *gencmd) CName() string {
@@ -40,6 +60,7 @@ func (cmd *gencmd) Help() string {
 func (cmd *gencmd) RegCFlags(fs *flag.FlagSet) {
 	fs.IntVar(&cmd.numWords, "words", 7, usageWords)
 	fs.IntVar(&cmd.numPhrases, "phrases", 1, usagePhrases)
+	fs.BoolVar(&cmd.noSpaces, "rm-spaces", false, usageRmSpaces)
 }
 
 func (cmd *gencmd) Run(opt []string) error {
@@ -58,6 +79,9 @@ func (cmd *gencmd) Run(opt []string) error {
 	}
 
 	for _, val := range list {
+		if cmd.noSpaces {
+			val = removeSpaces(val)
+		}
 		fmt.Fprint(os.Stdout, val+"\n")
 	}
 
@@ -72,4 +96,9 @@ func (cmd *gencmd) validateInputs() error {
 	}
 
 	return nil
+}
+
+//removes spaces from a phrase
+func removeSpaces(phrase string) string {
+	return strings.Replace(phrase, " ", "-", -1)
 }

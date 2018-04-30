@@ -8,7 +8,8 @@ import (
 	"github.com/azohra/lyra/pkg/lfile"
 )
 
-const helpstrdec = `
+const (
+	helpstrdec = `
 The following examples are all the possible options for the "decrypt" command:
 
 lyra decrypt file
@@ -47,14 +48,15 @@ lyra decrypt --print-only -p "mypassphrase" file
 
 `
 
-const usagePrint = `Prints the deciphered contents of a specified file to stdout, the original 
+	usagePrint = `Prints the deciphered contents of a specified file to stdout, the original 
 file will be unchanged (i.e still encrypted with the same key).
 `
 
-const usagePathDec = `Decrypts the contents of file and save the resulting plaintext in a new file. 
+	usagePathDec = `Decrypts the contents of file and save the resulting plaintext in a new file. 
 The original specified file will be unchanged (i.e still encrypted with the 
 same key) if this flag is set.
 `
+)
 
 type decryptcmd struct {
 	path       string
