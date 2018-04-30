@@ -28,7 +28,10 @@ func TestGenKey(t *testing.T) {
 }
 
 func TestGenSalt(t *testing.T) {
-	salt := GenSalt()
+	salt, err := GenSalt()
+	if err != nil {
+		t.Error(err)
+	}
 
 	if len(salt) != int(SaltSize) || cap(salt) != int(SaltSize) {
 		t.Errorf("Failed could not generate random bytes")

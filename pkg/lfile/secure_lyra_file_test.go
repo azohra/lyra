@@ -98,11 +98,11 @@ func TestParseFileSecureLyra(t *testing.T) {
 		}
 
 		fixTextProper := fix2
-		salt, err := hex.DecodeString("A6C4E5")
+		salt, err := hex.DecodeString("6ea11f4ff61992760ea29dc058b69a97")
 		if err != nil {
 			t.Error(err)
 		}
-		nonve, err := hex.DecodeString("B5A6")
+		nonve, err := hex.DecodeString("a6c21ab2f2c3758330b58bfb")
 		if err != nil {
 			t.Error(err)
 		}
@@ -132,28 +132,59 @@ func TestParseFileSecureLyra(t *testing.T) {
 
 	test(fixture2, aa, "2")
 	test(fixture3, bb, "3")
+
+	ctx := newSecureLyraFile()
+	err := ctx.ParseFile("../../test/fixture.invalidAuth.txt")
+	if err == nil {
+		t.Error("Parsing invalidAuth should have failed")
+	}
+
+	ctx = newSecureLyraFile()
+	err = ctx.ParseFile("../../test/fixture.empty.txt")
+	if err == nil {
+		t.Error("Parsing empty.txt should have failed")
+	}
 }
 
 func TestParseAuthData(t *testing.T) {
-	fixture := "@!A7B3@!C6E5"
+	fixture := "@!6ea11f4ff61992760ea29dc058b69a97@!a6c21ab2f2c3758330b58bfb"
 
 	a, b, err := parseAuthData(fixture)
 	if err != nil {
 		t.Error(err)
 	}
 
-	a1, err := hex.DecodeString("A7B3")
+	a1, err := hex.DecodeString("6ea11f4ff61992760ea29dc058b69a97")
 	if err != nil {
 		t.Error(err)
 	}
 
-	b1, err := hex.DecodeString("C6E5")
+	b1, err := hex.DecodeString("a6c21ab2f2c3758330b58bfb")
 	if err != nil {
 		t.Error(err)
 	}
 
 	if !reflect.DeepEqual(a, a1) && reflect.DeepEqual(b, b1) {
 		t.Error("Did not parse properly")
+	}
+
+	//invalid nonce
+	fixture = "@!aa@!ab1"
+	a, b, err = parseAuthData(fixture)
+	if err == nil {
+		t.Error("Parsing should fail as hex values are off")
+	}
+
+	fixture = "@ab1"
+	a, b, err = parseAuthData(fixture)
+	if err == nil {
+		t.Error("Parsing should fail as auth value is not valid")
+	}
+
+	fixture = ""
+	a, b, err = parseAuthData(fixture)
+	if err == nil {
+		t.Error("Parsing should fail as auth value is empty")
 	}
 }
 

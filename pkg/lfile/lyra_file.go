@@ -87,6 +87,10 @@ func (payload *LyraFile) ParseFile(file string) error {
 		return err
 	}
 
+	if len(buf.Bytes()) == 0 {
+		return errors.New("Can not specify an empty file")
+	}
+
 	payload.plaintext, err = memguard.NewImmutableFromBytes(buf.Bytes())
 	payload.isBeingUsed = true
 

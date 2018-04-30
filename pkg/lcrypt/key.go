@@ -34,14 +34,18 @@ type KeyManager interface {
 //generated for the new key.
 func NewLKey(passphrase, salt []byte) (*LKey, error) {
 	k := &LKey{}
+	var err error
 
 	if salt == nil {
-		k.salt = GenSalt()
+		k.salt, err = GenSalt()
+		if err != nil {
+			return nil, err
+		}
 	} else {
 		k.salt = salt
 	}
 
-	err := k.initKey(passphrase, k.salt)
+	err = k.initKey(passphrase, k.salt)
 	if err != nil {
 		return nil, err
 	}

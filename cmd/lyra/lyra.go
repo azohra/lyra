@@ -7,6 +7,7 @@ import (
 	"os"
 	"reflect"
 	"strings"
+	"syscall"
 
 	"golang.org/x/crypto/ssh/terminal"
 )
@@ -27,13 +28,13 @@ Commands:
 
 	encrypt		Encipher a specified file with inputed passphrase
 	decrypt		Decipher a specified file with inputed passphrase
-	generate	Generate diceware passphrase(s) via the EFF new worldlist
+	generate	Generate passphrase(s)
 		
 To get more info on commands do: lyra [Command] --help
 `
 	about = `Lyra is a lightweight tool used to protect sensitive data.
 	
-Coded with ❤️ by the Azohra team and made possible by open source software:
+Coded with ❤️ by the Azohra team and made possible with open source software:
 
   * gware by brsmsn (BSD-3-clause) https://github.com/brsmsn/gware
     * license available @ https://github.com/brsmsn/gware/blob/master/LICENSE
@@ -41,10 +42,10 @@ Coded with ❤️ by the Azohra team and made possible by open source software:
   * memguard by awnumar (Apache 2.0) https://github.com/awnumar/memguard
     * License available @ https://github.com/awnumar/memguard/blob/master/LICENSE  
 		
-  * crypto by golang.org (BSD-style) https://github.com/golang/crypto
-    * license available @ https://github.com/golang/crypto/blob/master/LICENSE
+  * crypto & sys by golang.org (BSD-style) https://github.com/golang/
+    * license available @ https://github.com/golang/go/blob/master/LICENSE
 `
-	version = `Version: 1.0.1 (April 2018)
+	version = `Version: 1.1.0 (May 2018)
 `
 )
 
@@ -155,17 +156,17 @@ func handleErr(err error) {
 
 func getPassphrase() []byte {
 	fmt.Println("Enter passphrase: ")
-	input, err := terminal.ReadPassword(0)
+	input, err := terminal.ReadPassword(syscall.Stdin)
 	handleErr(err)
 	return input
 }
 
 func setPassphrase() ([]byte, error) {
 	fmt.Println("Enter passphrase: ")
-	in1, err := terminal.ReadPassword(0)
+	in1, err := terminal.ReadPassword(syscall.Stdin)
 	handleErr(err)
 	fmt.Println("Enter passphrase again: ")
-	in2, err := terminal.ReadPassword(0)
+	in2, err := terminal.ReadPassword(syscall.Stdin)
 	handleErr(err)
 
 	defer wipe(in2)
