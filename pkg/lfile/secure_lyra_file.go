@@ -104,15 +104,16 @@ func (payload *SecureLyraFile) ParseFile(file string) error {
 		start++
 	}
 
-	if len(authData) == 0 {
-		return errors.New("Could Not Load Authentication Data, the file may be corrupt or has been tempered with")
+	if len(authData) == 0 || len(str) == 0 {
+		return errors.New("Specified file can not be empty")
 	}
 
-	payload.ciphertext = str[start+1:]
 	payload.salt, payload.nonce, err = parseAuthData(string(authData))
 	if err != nil {
 		return err
 	}
+
+	payload.ciphertext = str[start+1:]
 
 	return nil
 }
@@ -144,7 +145,7 @@ func (payload *SecureLyraFile) Write(wd string) error {
 func parseAuthData(data string) ([]byte, []byte, error) {
 	adata := strings.Split(data, Separator)
 	if len(adata) != 3 {
-		return nil, nil, errors.New("Parsing Failed")
+		return nil, nil, errors.New("Failed to load authentication parameters, the file is either corrupt or was not encrypted with lyra")
 	}
 
 	s, err := hex.DecodeString(adata[1])
