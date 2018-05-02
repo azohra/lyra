@@ -22,7 +22,7 @@ Lyra is a lightweight and fast encryption tool that makes protecting your sensit
 
 # Requirements (if building from source)
 * Go 1.9 and above
-* [Go Deps](https://golang.github.io/dep/) for dependency management.
+* [Go Dep](https://golang.github.io/dep/) for dependency management.
 
 # Dependencies
 * [gware](https://github.com/brsmsn/gware) for diceware passphrase generation.
