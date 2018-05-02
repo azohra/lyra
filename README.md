@@ -57,4 +57,4 @@ To get more info on commands do: lyra [Command] --help
 ```
 
 # Releases
-Binaries and tags are all signed. The signing key used can be found by searching `Brandon Sam Soon (work key) <brandon.samsoon@loblaw.ca>` with keyid of `5604E4DC6DC74D9B`.
+Binaries and tags are all signed. The signing key used can be found by searching keyid `5604E4DC6DC74D9B`.
