@@ -51,7 +51,7 @@ Commands:
 
 	encrypt		Encipher a specified file with inputed passphrase
 	decrypt		Decipher a specified file with inputed passphrase
-	generate	Generate diceware passphrase(s) via the EFF new worldlist
+	generate	Generate passphrase(s)
 		
 To get more info on commands do: lyra [Command] --help
 ```
