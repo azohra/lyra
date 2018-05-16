@@ -15,7 +15,7 @@ Lyra is a lightweight and fast encryption tool that makes protecting your sensit
   * Encrypting is as easy as entering: `lyra encrypt file` and to decrypting is just as simple: `lyra decrypt file`
 * No need to worry about complex cipher options and configurations.
   * Lyra uses a single strong time tested cipher to protect your data. Your data is encrypted with AES-256-GCM which simultaneously provides data confidentiality, authenticity and integrity (see [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption)).
-  * Values that need to be unique and random (salt and nonce) are generated via a cryptographically secure pseudo random number generator.
+  * Values that need to be unique and random (salt) are generated via a cryptographically secure pseudo random number generator.
 * Strong GPU and ASIC resistant KDF being used to protect your passphrase.
   * Lyra uses argon2 to make dictionary attacks and brute force guessing even harder.
 * Generate strong memorable passphrases via the diceware method.
