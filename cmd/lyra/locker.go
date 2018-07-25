@@ -1,14 +1,13 @@
 package main
 
 import (
-	"bufio"
 	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"os"
-	"path/filepath"
 	"strings"
+
+	"github.com/fvumbaca/lyra/cmd/lyra/locker"
 )
 
 const lockerConfig = "./lyralocker"
@@ -18,6 +17,12 @@ type lockercmd struct {
 	doEncrypt          bool
 	fileRecursionDepth int
 	passphrase         string
+}
+
+type lockerfile struct {
+	filename       string
+	lockedFilename string
+	isLocked       bool
 }
 
 func (cmd *lockercmd) CName() string {
@@ -52,112 +57,32 @@ func (cmd *lockercmd) Run(opt []string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Read password: %s\n", pass)
 	cmd.passphrase = pass
 
-	// TODO support multiple possible names like Docker...
-	lockerFilename, err := filepath.Abs(lockerConfig)
+	files, err := locker.ParseLockerFile("./lyralocker")
 	if err != nil {
 		return err
 	}
 
-	lockerFile, err := os.Open(lockerFilename)
-	defer lockerFile.Close()
-	if err != nil {
-		return err
-	}
-
-	lockerScanner := bufio.NewScanner(lockerFile)
-
-	for lockerScanner.Scan() {
-		filename, err := filepath.Abs(lockerScanner.Text())
-		if err != nil {
-			report(err)
-			continue
-		}
-		fmt.Println("Read: " + filename)
-
-		fileInfo, err := os.Stat(filename)
-		if err != nil {
-			fmt.Printf("Error because exists? %t\n", os.IsExist(err))
-			report(err)
-			continue
-		}
-
-		if fileInfo.IsDir() {
-			processLockerFolder(filename, cmd)
+	for _, f := range files {
+		fmt.Printf("Parsed file: %+v\n", f)
+		if f.Err != nil {
+			report(f.Err)
 		} else {
-			err := processLockerFile(filename, cmd)
-			if err != nil {
-				report(err)
-				continue
+			if cmd.doEncrypt {
+				f.Lock([]byte(cmd.passphrase))
+			} else {
+				f.Unlock([]byte(cmd.passphrase))
 			}
-
 		}
+
 	}
 
 	return nil
 }
 
 func report(err error) {
-	// TODO report error
-}
-
-func processLockerFolder(foldername string, cmd *lockercmd) {
-	filepath.Walk(foldername, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			report(err)
-			return err
-		}
-
-		if !info.IsDir() {
-			return processLockerFile(path, cmd)
-		}
-		return nil
-	})
-}
-
-func processLockerFile(filename string, cmd *lockercmd) error {
-	fmt.Println("Processing: " + filename)
-
-	if cmd.doEncrypt {
-		fmt.Println("Trying to encrypt: " + filename)
-		err := encrypt(filename, createLockedFilename(filename), []byte(cmd.passphrase))
-		if err != nil {
-			return err
-		}
-		return os.Remove(filename)
-	} else {
-		fmt.Println("Trying to decrypt: " + filename)
-		lockedFilename := createLockedFilename(filename)
-
-		err := decrypt(lockedFilename, filename, false, []byte(cmd.passphrase))
-		if err != nil {
-			return err
-		}
-		return os.Remove(lockedFilename)
-	}
-
-	// if cmd.doEncrypt != isLocked(filename) {
-	// 	if cmd.doEncrypt {
-	// 		err := encrypt(filename, createFilenameLock(filename, cmd.doEncrypt), []byte(cmd.passphrase))
-	// 		if err != nil {
-	// 			return err
-	// 		}
-	// 		return os.Remove(filename)
-	// 	} else {
-	// 		err := decrypt(filename, createFilenameLock(filename, cmd.doEncrypt), false, []byte(cmd.passphrase))
-	// 		if err != nil {
-	// 			return err
-	// 		}
-	// 		return os.Remove(filename)
-	// 	}
-	// }
-
-}
-
-func createLockedFilename(filename string) string {
-	return filename + ".locked"
+	fmt.Println("An error occurred: " + err.Error())
 }
 
 func readPassFile() (string, error) {
@@ -166,18 +91,4 @@ func readPassFile() (string, error) {
 		return "", err
 	}
 	return strings.TrimSpace(string(contents)), nil
-}
-
-func isFileLocked(filename string) (bool, error) {
-	lockedFilename := createLockedFilename(filename)
-
-	_, infoErr := os.Stat(filename)
-	_, lockedInfoErr := os.Stat(lockedFilename)
-
-	if infoErr != nil && lockedInfoErr != nil {
-		return false, infoErr
-	}
-
-	return os.IsExist(infoErr), nil
-
 }

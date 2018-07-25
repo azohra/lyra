@@ -6,9 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/azohra/lyra/pkg/lcrypt"
-	"github.com/azohra/lyra/pkg/lfile"
 	"github.com/brsmsn/gware/pkg/diceware"
+	"github.com/fvumbaca/lyra/pkg/encryption"
 )
 
 const (
@@ -138,7 +137,7 @@ func (cmd *encryptcmd) Run(opt []string) error {
 		cmd.passphrase = string(input)
 	}
 
-	err = encrypt(opt[0], cmd.path, []byte(cmd.passphrase))
+	err = encryption.Encrypt(opt[0], cmd.path, []byte(cmd.passphrase))
 	if err != nil {
 		return err
 	}
@@ -154,41 +153,6 @@ func (cmd *encryptcmd) validateInputs() error {
 		return errors.New("Can not specify a passphrase when auto-gen flag has been set")
 	} else if cmd.autogenDice && cmd.autogenStr {
 		return errors.New("Can not specify --auto-gen and --gen-str at the same time")
-	}
-
-	return nil
-}
-
-//encrypt encrypts file file and overides the content of file with the ciphertext
-//of the specified plaintext file.
-func encrypt(file, saveTo string, passphrase []byte) error {
-	ptFile, err := lfile.NewParsedLyraFile(file)
-	if err != nil {
-		return err
-	}
-
-	key, err := lcrypt.NewLKey(passphrase, nil)
-	if err != nil {
-		return err
-	}
-
-	ctFile, err := ptFile.EncipherFile(key)
-	if err != nil {
-		return err
-	}
-
-	switch saveTo {
-	case "":
-		err = ctFile.Write(file)
-	default:
-		err = ctFile.Write(saveTo)
-	}
-	if err != nil {
-		return err
-	}
-	err = key.DestroyKey()
-	if err != nil {
-		return err
 	}
 
 	return nil

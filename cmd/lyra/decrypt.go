@@ -4,8 +4,7 @@ import (
 	"errors"
 	"flag"
 
-	"github.com/azohra/lyra/pkg/lcrypt"
-	"github.com/azohra/lyra/pkg/lfile"
+	"github.com/fvumbaca/lyra/pkg/encryption"
 )
 
 const (
@@ -93,7 +92,7 @@ func (cmd *decryptcmd) Run(opt []string) error {
 		cmd.passphrase = string(getPassphrase())
 	}
 
-	err = decrypt(opt[0], cmd.path, cmd.printOnly, []byte(cmd.passphrase))
+	err = encryption.Decrypt(opt[0], cmd.path, cmd.printOnly, []byte(cmd.passphrase))
 	cmd.passphrase = ""
 
 	return err
@@ -102,46 +101,6 @@ func (cmd *decryptcmd) Run(opt []string) error {
 func (cmd *decryptcmd) validateInputs() error {
 	if cmd.printOnly && cmd.path != "" {
 		return errors.New("Invalid input, -s and --print-only can't be set at the same time")
-	}
-
-	return nil
-}
-
-//decrypt encrypts file file and overides the content of file with the ciphertext
-//of the specified plaintext file.
-func decrypt(file, saveTo string, print bool, passphrase []byte) error {
-	ctFile, err := lfile.NewParsedSLFile(file)
-	if err != nil {
-		return err
-	}
-
-	key, err := lcrypt.NewLKey(passphrase, ctFile.RetrieveSalt())
-	if err != nil {
-		return err
-	}
-
-	ptFile, err := ctFile.DecipherFile(key)
-	if err != nil {
-		return err
-	}
-
-	if saveTo == "" && !print {
-		err = ptFile.Write(file)
-	} else if saveTo != "" && !print {
-		err = ptFile.Write(saveTo)
-	}
-
-	if err != nil {
-		return err
-	}
-
-	if print {
-		ptFile.PrintLyraFile()
-	}
-
-	err = key.DestroyKey()
-	if err != nil {
-		handleErr(err)
 	}
 
 	return nil
