@@ -62,6 +62,7 @@ func main() {
 		&encryptcmd{},
 		&decryptcmd{},
 		&gencmd{},
+		&lockercmd{},
 	}
 
 	versionSet := flag.Bool("version", false, "")
