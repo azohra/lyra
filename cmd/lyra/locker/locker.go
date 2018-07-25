@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/fvumbaca/lyra/pkg/encryption"
+	"github.com/fvumbaca/lyra/pkg/lcrypt"
 )
 
 const (
@@ -92,7 +92,7 @@ func newLockerAsset(filename string) (l Asset) {
 // Lock encrypts a locker Asset.
 func (a Asset) Lock(passphrase []byte) error {
 	if !a.IsLocked {
-		err := encryption.Encrypt(a.Filename, a.LockedFilename, passphrase)
+		err := lcrypt.Encrypt(a.Filename, a.LockedFilename, passphrase)
 		if err != nil {
 			return err
 		}
@@ -104,7 +104,7 @@ func (a Asset) Lock(passphrase []byte) error {
 // Unlock decrypts a locker Asset.
 func (a Asset) Unlock(passphrase []byte) error {
 	if a.IsLocked {
-		err := encryption.Decrypt(a.LockedFilename, a.Filename, false, passphrase)
+		err := lcrypt.Decrypt(a.LockedFilename, a.Filename, false, passphrase)
 		if err != nil {
 			return err
 		}

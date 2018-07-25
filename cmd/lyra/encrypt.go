@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/brsmsn/gware/pkg/diceware"
-	"github.com/fvumbaca/lyra/pkg/encryption"
+	"github.com/fvumbaca/lyra/pkg/lcrypt"
 )
 
 const (
@@ -137,7 +137,7 @@ func (cmd *encryptcmd) Run(opt []string) error {
 		cmd.passphrase = string(input)
 	}
 
-	err = encryption.Encrypt(opt[0], cmd.path, []byte(cmd.passphrase))
+	err = lcrypt.Encrypt(opt[0], cmd.path, []byte(cmd.passphrase))
 	if err != nil {
 		return err
 	}
