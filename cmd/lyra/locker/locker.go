@@ -44,12 +44,14 @@ func ParseLockerFile(filename string) ([]Asset, error) {
 		fileInfo, err := os.Stat(entry)
 		// cant be a dir if it is not found but maybe .locked?
 		if err == nil && fileInfo.IsDir() {
-			fmt.Println("Not handling folders yet")
 
 			filepath.Walk(entry, func(path string, info os.FileInfo, err error) error {
-				// newLockerAsset will propagate errors to the top cmd level so we dont need to
-				// handle them here
-				jobs = append(jobs, newLockerAsset(path))
+				if info != nil && !info.IsDir() {
+					// newLockerAsset will propagate errors to the top cmd level so we dont need to
+					// handle them here
+					fmt.Println("Walking on: " + path)
+					jobs = append(jobs, newLockerAsset(path))
+				}
 				return nil
 			})
 

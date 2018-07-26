@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/fvumbaca/lyra/cmd/lyra/locker"
@@ -64,25 +65,54 @@ func (cmd *lockercmd) Run(opt []string) error {
 		return err
 	}
 
+	successCount := 0
+	failCount := 0
+
 	for _, f := range files {
-		fmt.Printf("Parsed file: %+v\n", f)
 		if f.Err != nil {
-			report(f.Err)
+			if os.IsNotExist(f.Err) {
+				fmt.Fprint(os.Stderr, fmt.Sprintf("File %s does not exist\n", f.Filename))
+			}
+			failCount++
 		} else {
 			if cmd.doEncrypt {
+				if !f.IsLocked {
+					fmt.Printf("Locking: %s\n", f.Filename)
+				} else {
+					fmt.Println(f.Filename + " is already locked.")
+				}
 				f.Lock([]byte(cmd.passphrase))
 			} else {
-				f.Unlock([]byte(cmd.passphrase))
+				if f.IsLocked {
+					fmt.Printf("Unlocking: %s\n", f.Filename)
+				} else {
+					fmt.Println(f.Filename + " is already unlocked.")
+				}
+				err := f.Unlock([]byte(cmd.passphrase))
+				if err != nil {
+					fmt.Fprint(os.Stderr, err.Error())
+				} else {
+
+					successCount++
+				}
 			}
 		}
 
 	}
 
-	return nil
-}
+	action := "encripted"
+	if !cmd.doEncrypt {
+		action = "decrypted"
+	}
 
-func report(err error) {
-	fmt.Println("An error occurred: " + err.Error())
+	if failCount > 0 {
+		fmt.Fprintf(os.Stderr, "%d assets were unable to be encrypted", failCount)
+		os.Exit(1)
+	} else {
+		fmt.Printf("%d assets %s successfully!\n", successCount, action)
+		return nil
+	}
+	return nil
 }
 
 func readPassFile() (string, error) {
