@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/azohra/lyra/pkg/lcrypt"
 	"github.com/brsmsn/gware/pkg/diceware"
-	"github.com/fvumbaca/lyra/pkg/lcrypt"
 )
 
 const (

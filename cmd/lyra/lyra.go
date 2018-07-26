@@ -29,6 +29,7 @@ Commands:
 	encrypt		Encipher a specified file with inputed passphrase
 	decrypt		Decipher a specified file with inputed passphrase
 	generate	Generate passphrase(s)
+	locker		A tool for locking project secrets
 		
 To get more info on commands do: lyra [Command] --help
 `

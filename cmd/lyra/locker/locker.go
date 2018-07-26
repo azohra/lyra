@@ -4,14 +4,16 @@ import (
 	"bufio"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
-	"github.com/fvumbaca/lyra/pkg/lcrypt"
+	"github.com/azohra/lyra/pkg/lcrypt"
 )
 
 const (
-	lockedFileExtension = ".locked" // What the extension is for locked files
-	commentSequence     = "#"       // What signals a comment in a locker file
+	lockedFileExtension      = ".locked" // What the extension is for locked files
+	commentSequence          = "#"       // What signals a comment in a locker file
+	encryptionValidatorRegex = `^\@\![a-f0-9]{32}\@\![a-f0-9]{24}$`
 )
 
 // Asset represents a Locker file asset.
@@ -63,6 +65,9 @@ func ParseLockerFile(filename string) ([]Asset, error) {
 	return jobs, nil
 }
 
+// newLockerAsset creates a new asset record from a filename.
+// This includes determining if the file is locked and/or
+// even exists
 func newLockerAsset(filename string) (l Asset) {
 	l.Filename = filename
 	l.LockedFilename = filename
@@ -111,6 +116,29 @@ func (a Asset) Unlock(passphrase []byte) error {
 		return os.Remove(a.LockedFilename)
 	}
 	return nil
+}
+
+// ValidateLocked validates an asset is locked
+// and the file is encrypted - not just
+// the extension changed.
+func (a Asset) ValidateLocked() (bool, error) {
+	validationRegex := regexp.MustCompile(encryptionValidatorRegex)
+	if !a.IsLocked {
+		return false, nil
+	} else {
+		file, err := os.Open(a.LockedFilename)
+		defer file.Close()
+		if err != nil {
+			return false, err
+		}
+
+		scanner := bufio.NewScanner(file)
+		if scanner.Scan() {
+			firstLine := scanner.Text()
+			return validationRegex.MatchString(firstLine), nil
+		}
+	}
+	return false, nil
 }
 
 func createLockedFilename(filename string, lock bool) string {
