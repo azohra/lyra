@@ -13,6 +13,8 @@ import (
 
 const lockerConfig = "./lyralocker"
 const lockerpassFilename = "./.lockerpass"
+const checkmark = "✓"
+const chironKey = string(0x26B7)
 
 type lockercmd struct {
 	doEncrypt          bool
@@ -76,23 +78,21 @@ func (cmd *lockercmd) Run(opt []string) error {
 			failCount++
 		} else {
 			if cmd.doEncrypt {
-				if !f.IsLocked {
-					fmt.Printf("Locking: %s\n", f.Filename)
+				err := f.Lock([]byte(cmd.passphrase))
+				if err != nil {
+					fmt.Fprint(os.Stderr, err.Error())
+					failCount++
 				} else {
-					fmt.Println(f.Filename + " is already locked.")
+					fmt.Printf("%s  %s\n", checkmark, f.Filename)
+					successCount++
 				}
-				f.Lock([]byte(cmd.passphrase))
 			} else {
-				if f.IsLocked {
-					fmt.Printf("Unlocking: %s\n", f.Filename)
-				} else {
-					fmt.Println(f.Filename + " is already unlocked.")
-				}
 				err := f.Unlock([]byte(cmd.passphrase))
 				if err != nil {
 					fmt.Fprint(os.Stderr, err.Error())
+					failCount++
 				} else {
-
+					fmt.Printf("%s  %s\n", checkmark, f.Filename)
 					successCount++
 				}
 			}
@@ -109,7 +109,7 @@ func (cmd *lockercmd) Run(opt []string) error {
 		fmt.Fprintf(os.Stderr, "%d assets were unable to be encrypted", failCount)
 		os.Exit(1)
 	} else {
-		fmt.Printf("%d assets %s successfully!\n", successCount, action)
+		fmt.Printf("%d assets %s\n", successCount, action)
 		return nil
 	}
 	return nil

@@ -2,7 +2,6 @@ package locker
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -49,7 +48,6 @@ func ParseLockerFile(filename string) ([]Asset, error) {
 				if info != nil && !info.IsDir() {
 					// newLockerAsset will propagate errors to the top cmd level so we dont need to
 					// handle them here
-					fmt.Println("Walking on: " + path)
 					jobs = append(jobs, newLockerAsset(path))
 				}
 				return nil
