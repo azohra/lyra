@@ -7,24 +7,18 @@ import (
 	"os"
 	"strings"
 
-	"github.com/azohra/lyra/cmd/lyra/locker"
+	"github.com/azohra/lyra/internal/pkg/locker"
 )
 
 const (
-	lockerUsage = `Locker is a tool for project secret management using Lyra's encryption.unlock
-
-	$ lyra locker [Flags] <Command>
-
-Commands:
+	lockerUsage = `
+	
+Sub commands:
 
 	lock	Lock all assets listed in lyralocker file
 	unlock	Unlock all assets listed in lyralocker file
-	shake	Shakes the locker to test for unencrypted files
+	check	Checks the locker to test for any unencrypted files
 
-Flags:
-
-	-q		Quiet mode. Only prints necessary info to the screen
-	-p		Enter password
 `
 
 	lockerConfig       = "./lyralocker"
@@ -84,8 +78,8 @@ func (cmd *lockercmd) Run(opt []string) error {
 	case "unlock":
 		response, code = unlock(files, cmd)
 		break
-	case "shake":
-		response, code = shake(files, cmd)
+	case "check":
+		response, code = check(files, cmd)
 		break
 	default:
 		fmt.Println(lockerUsage)
@@ -172,7 +166,7 @@ func unlock(files []locker.Asset, cmd *lockercmd) (string, int) {
 	return reply, replyCode
 }
 
-func shake(files []locker.Asset, cmd *lockercmd) (string, int) {
+func check(files []locker.Asset, cmd *lockercmd) (string, int) {
 	successCount := 0
 	failCount := 0
 	for _, f := range files {

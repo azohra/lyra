@@ -1,4 +1,4 @@
-package lcrypt
+package encryption
 
 import (
 	"testing"

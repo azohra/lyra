@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/azohra/lyra/pkg/lcrypt"
+	"github.com/azohra/lyra/internal/pkg/encryption"
 	"github.com/brsmsn/gware/pkg/diceware"
 )
 
@@ -37,7 +37,7 @@ lyra encrypt --gen-str file
 	
 	Encrypts and overides file (user specified file) with an auto generated passphrase
 	and outputs the auto generated passphrase to stdout.
-	Auto generaates a 7 word passphrase in kebab case (no spaces).
+	Auto generates a 7 word passphrase in kebab case (no spaces).
 
 lyra encrypt -p "mypassphrase" file
 
@@ -137,7 +137,7 @@ func (cmd *encryptcmd) Run(opt []string) error {
 		cmd.passphrase = string(input)
 	}
 
-	err = lcrypt.Encrypt(opt[0], cmd.path, []byte(cmd.passphrase))
+	err = encryption.Encrypt(opt[0], cmd.path, []byte(cmd.passphrase))
 	if err != nil {
 		return err
 	}

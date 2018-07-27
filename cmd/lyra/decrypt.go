@@ -4,7 +4,7 @@ import (
 	"errors"
 	"flag"
 
-	"github.com/fvumbaca/lyra/pkg/lcrypt"
+	"github.com/azohra/lyra/internal/pkg/encryption"
 )
 
 const (
@@ -92,7 +92,7 @@ func (cmd *decryptcmd) Run(opt []string) error {
 		cmd.passphrase = string(getPassphrase())
 	}
 
-	err = lcrypt.Decrypt(opt[0], cmd.path, cmd.printOnly, []byte(cmd.passphrase))
+	err = encryption.Decrypt(opt[0], cmd.path, cmd.printOnly, []byte(cmd.passphrase))
 	cmd.passphrase = ""
 
 	return err

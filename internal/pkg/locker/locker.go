@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/azohra/lyra/pkg/lcrypt"
+	"github.com/azohra/lyra/internal/pkg/encryption"
 )
 
 const (
@@ -50,7 +50,7 @@ func ParseLockerFile(filename string) ([]Asset, error) {
 				if info != nil && !info.IsDir() {
 					// newLockerAsset will propagate errors to the top cmd level so we dont need to
 					// handle them here
-					jobs = append(jobs, newLockerAsset(path))
+					jobs = append(jobs, NewLockerAsset(path))
 				}
 				return nil
 			})
@@ -58,17 +58,17 @@ func ParseLockerFile(filename string) ([]Asset, error) {
 		} else {
 			// Creating a locker asset from a missing file is ok. Error will
 			// propagate to the cmd level for reporting
-			jobs = append(jobs, newLockerAsset(entry))
+			jobs = append(jobs, NewLockerAsset(entry))
 		}
 
 	}
 	return jobs, nil
 }
 
-// newLockerAsset creates a new asset record from a filename.
+// NewLockerAsset creates a new asset record from a filename.
 // This includes determining if the file is locked and/or
 // even exists
-func newLockerAsset(filename string) (l Asset) {
+func NewLockerAsset(filename string) (l Asset) {
 	l.Filename = filename
 	l.LockedFilename = filename
 	l.IsLocked = true
@@ -97,7 +97,7 @@ func newLockerAsset(filename string) (l Asset) {
 // Lock encrypts a locker Asset.
 func (a Asset) Lock(passphrase []byte) error {
 	if !a.IsLocked {
-		err := lcrypt.Encrypt(a.Filename, a.LockedFilename, passphrase)
+		err := encryption.Encrypt(a.Filename, a.LockedFilename, passphrase)
 		if err != nil {
 			return err
 		}
@@ -109,7 +109,7 @@ func (a Asset) Lock(passphrase []byte) error {
 // Unlock decrypts a locker Asset.
 func (a Asset) Unlock(passphrase []byte) error {
 	if a.IsLocked {
-		err := lcrypt.Decrypt(a.LockedFilename, a.Filename, false, passphrase)
+		err := encryption.Decrypt(a.LockedFilename, a.Filename, false, passphrase)
 		if err != nil {
 			return err
 		}

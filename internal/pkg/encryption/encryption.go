@@ -1,4 +1,4 @@
-package lcrypt
+package encryption
 
 import (
 	"github.com/azohra/lyra/pkg/lcrypt"
