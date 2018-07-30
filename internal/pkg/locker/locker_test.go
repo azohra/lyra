@@ -1,6 +1,41 @@
 package locker
 
-import "testing"
+import (
+	"testing"
+)
+
+func TestValidateLocked(t *testing.T) {
+	asset1 := NewLockerAsset("../../../test/locker/test-file1.txt")    // just the txt
+	asset2 := NewLockerAsset("../../../test/locker/test-file2.txt")    // normal txt and locked files
+	asset3 := NewLockerAsset("../../../test/locker/test-file3.txt")    // plain txt marked as locked but not encrypted
+	asset4 := NewLockerAsset("../../../test/locker/test-file4.txt")    // properly locked
+	asset5 := NewLockerAsset("../../../test/locker/test-file-404.txt") // does not exist
+
+	isLocked, err := asset1.ValidateLocked()
+	if err != nil || isLocked {
+		t.Errorf("%s is plan text and should not be validated as locked. Got: (%v, %v)", asset1.Filename, isLocked, err)
+	}
+
+	isLocked, err = asset2.ValidateLocked()
+	if err != nil || isLocked {
+		t.Errorf("%s is in both plain text and encrypted. It should not be validated as locked. Got: (%v, %v)", asset2.Filename, isLocked, err)
+	}
+
+	isLocked, err = asset3.ValidateLocked()
+	if err != nil || isLocked {
+		t.Errorf("%s has the extension .locked but is still in plan text. It should not be validated as locked. Got: (%v, %v)", asset3.Filename, isLocked, err)
+	}
+
+	isLocked, err = asset4.ValidateLocked()
+	if err != nil || !isLocked {
+		t.Errorf("%s should be validated as locked. Got: (%v, %v)", asset4.Filename, isLocked, err)
+	}
+
+	isLocked, err = asset5.ValidateLocked()
+	if err == nil {
+		t.Errorf("%s does not exist and should error out. Got: (%v, %v)", asset5.Filename, isLocked, err)
+	}
+}
 
 func TestIsFilenameLocked(t *testing.T) {
 	if isFilenameLocked("somefile.txt") {

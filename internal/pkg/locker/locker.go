@@ -126,6 +126,14 @@ func (a Asset) ValidateLocked() (bool, error) {
 	if !a.IsLocked {
 		return false, nil
 	} else {
+
+		// Make sure the file does not exist in plain text first
+		_, err := os.Stat(a.Filename)
+		if err == nil || os.IsExist(err) {
+			return false, nil
+		}
+
+		// Check the headder of the locked file
 		file, err := os.Open(a.LockedFilename)
 		defer file.Close()
 		if err != nil {
