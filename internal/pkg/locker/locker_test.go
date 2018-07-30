@@ -6,6 +6,18 @@ import (
 	"testing"
 )
 
+func TestParseLockerFile(t *testing.T) {
+	assets, err := ParseLockerFile("../../../lyralocker")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if len(assets) != 1 {
+		t.Errorf("Expecting 1 entry in test lyralocker file")
+		return
+	}
+}
+
 func TestValidateLockAndUnlock(t *testing.T) {
 	testFile := "../../../test/locker/lockme.txt"
 	fileText := "This data is to be locked and unlocked by tests\n"
