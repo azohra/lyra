@@ -1,0 +1,8 @@
+# This file is for listing assets to be encrypted
+
+# Uncomment the following line to lock the file
+# super-secret-key.txt
+
+test-item1
+test-item2
+# test-item3

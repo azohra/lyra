@@ -95,25 +95,33 @@ func NewLockerAsset(filename string) (l Asset) {
 }
 
 // Lock encrypts a locker Asset.
-func (a Asset) Lock(passphrase []byte) error {
+func (a *Asset) Lock(passphrase []byte) error {
 	if !a.IsLocked {
 		err := encryption.Encrypt(a.Filename, a.LockedFilename, passphrase)
 		if err != nil {
 			return err
 		}
-		return os.Remove(a.Filename)
+		err = os.Remove(a.Filename)
+		if err == nil {
+			a.IsLocked = true
+		}
+		return err
 	}
 	return nil
 }
 
 // Unlock decrypts a locker Asset.
-func (a Asset) Unlock(passphrase []byte) error {
+func (a *Asset) Unlock(passphrase []byte) error {
 	if a.IsLocked {
 		err := encryption.Decrypt(a.LockedFilename, a.Filename, false, passphrase)
 		if err != nil {
 			return err
 		}
-		return os.Remove(a.LockedFilename)
+		err = os.Remove(a.LockedFilename)
+		if err == nil {
+			a.IsLocked = false
+		}
+		return err
 	}
 	return nil
 }
@@ -121,7 +129,7 @@ func (a Asset) Unlock(passphrase []byte) error {
 // ValidateLocked validates an asset is locked
 // and the file is encrypted - not just
 // the extension changed.
-func (a Asset) ValidateLocked() (bool, error) {
+func (a *Asset) ValidateLocked() (bool, error) {
 	validationRegex := regexp.MustCompile(encryptionValidatorRegex)
 	if !a.IsLocked {
 		return false, nil

@@ -1,8 +1,53 @@
 package locker
 
 import (
+	"io/ioutil"
+	"os"
 	"testing"
 )
+
+func TestValidateLockAndUnlock(t *testing.T) {
+	testFile := "../../../test/locker/lockme.txt"
+	fileText := "This data is to be locked and unlocked by tests\n"
+	passphrase := "forthegoodoftesting"
+
+	// clean anything that may be remaining from previous tests
+	os.Remove(testFile)
+	os.Remove(testFile + ".locked")
+
+	// overwrite the file if already exists, and schedule it to be cleaned up
+	ioutil.WriteFile(testFile, []byte(fileText), 0666)
+	defer os.Remove(testFile)
+	defer os.Remove(testFile + ".locked") // just incase a premature exit
+
+	asset := NewLockerAsset(testFile)
+	asset.Lock([]byte(passphrase))
+
+	isLocked, err := asset.ValidateLocked()
+	if err != nil || !isLocked {
+		t.Errorf("Failed to lock file. Got: (%v, %v)", isLocked, err)
+	}
+
+	contents, err := ioutil.ReadFile(testFile + ".locked")
+	if err != nil {
+		t.Error(err)
+	}
+	if string(contents) == fileText {
+		t.Errorf("File was not encrypted.")
+		return
+	}
+
+	asset.Unlock([]byte(passphrase))
+
+	contents, err = ioutil.ReadFile(testFile)
+	if err != nil {
+		t.Error(err)
+	}
+	if string(contents) != fileText {
+		t.Errorf("File was not decrypted properly.")
+	}
+
+}
 
 func TestValidateLocked(t *testing.T) {
 	asset1 := NewLockerAsset("../../../test/locker/test-file1.txt")    // just the txt
