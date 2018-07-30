@@ -124,7 +124,7 @@ func (cmd *lockercmd) Run(opt []string) error {
 
 // Initializes the cwd with a password file and a config file
 func initializeLocker() (string, int) {
-	createdPassFile := true
+	createdPassFile := false
 	passFileExists, err := isFileExists(LockerPassphraseFilename)
 	if err != nil {
 		return err.Error(), BadExit
@@ -154,7 +154,7 @@ func initializeLocker() (string, int) {
 			if err != nil {
 				return "Could not write password to " + LockerPassphraseFilename, BadExit
 			}
-
+			createdPassFile = true
 		}
 
 	}
@@ -178,6 +178,8 @@ func initializeLocker() (string, int) {
 
 			_, err := fmt.Fprintln(configFile, lockerFileTemplate)
 			if err != nil {
+				configFileCreated = false
+			} else {
 				configFileCreated = true
 			}
 
@@ -214,7 +216,7 @@ func lock(assets []locker.Asset, cmd *lockercmd) (string, int) {
 		} else {
 			err := asset.Lock([]byte(cmd.passphrase))
 			if err != nil {
-				fmt.Fprint(os.Stderr, err.Error())
+				fmt.Fprint(os.Stderr, err.Error()+"\n")
 				failCount++
 			} else {
 				if !cmd.quiet {
@@ -306,7 +308,7 @@ func check(files []locker.Asset, cmd *lockercmd) (string, int) {
 
 	if failCount > 0 {
 		replyCode = BadExit
-		reply = fmt.Sprintf("%d/%d assets secured. %d files could not be encrypted.\n", successCount, len(files), failCount)
+		reply = fmt.Sprintf("%d/%d assets secured. %d files have not be encrypted.\n", successCount, len(files), failCount)
 	}
 
 	return reply, replyCode
@@ -327,9 +329,6 @@ func isFileExists(filename string) (bool, error) {
 	if err != nil {
 		if os.IsNotExist(err) {
 			return false, nil
-		}
-		if os.IsExist(err) {
-			return true, nil
 		}
 		return false, err
 	}
