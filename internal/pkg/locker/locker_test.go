@@ -7,12 +7,12 @@ import (
 )
 
 func TestParseLockerFile(t *testing.T) {
-	assets, err := ParseLockerFile("../../../lyralocker")
+	assets, err := ParseLockerFile("../../../test/locker/lyralocker")
 	if err != nil {
 		t.Error(err)
 		return
 	}
-	if len(assets) != 1 {
+	if len(assets) != 2 {
 		t.Errorf("Expecting 1 entry in test lyralocker file")
 		return
 	}
