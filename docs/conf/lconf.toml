@@ -1,0 +1,6 @@
+#example of aLyra configuration
+
+[vault]
+  enable = false
+  server = "http://localhost:8200"
+  ca_cert = [""]
